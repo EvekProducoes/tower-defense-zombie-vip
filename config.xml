@@ -1,0 +1,46 @@
+<?xml version='1.0' encoding='utf-8'?>
+<widget id="com.devemfranco.towerdefensezombievip" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>Tower Defense Zombie ViP</name>
+    <description>
+        Tower Defense apocalíptico premium - Sobreviva às hordas de zumbis!
+    </description>
+    <author email="dev.emfranco@gmail.com" href="https://devemfranco.com">
+        Dev.EMFranco
+    </author>
+    
+    <content src="index.html" />
+    
+    <access origin="*" />
+    <allow-intent href="http://*/*" />
+    <allow-intent href="https://*/*" />
+    
+    <preference name="Orientation" value="landscape" />
+    <preference name="Fullscreen" value="true" />
+    <preference name="SplashScreenDelay" value="2000" />
+    <preference name="AutoHideSplashScreen" value="true" />
+    <preference name="SplashScreen" value="screen" />
+    <preference name="backgroundColor" value="#0a0e27" />
+    
+    <preference name="android-minSdkVersion" value="22" />
+    <preference name="android-targetSdkVersion" value="33" />
+    
+    <platform name="android">
+        <allow-intent href="market:*" />
+        
+        <config-file parent="/*" target="AndroidManifest.xml">
+            <uses-permission android:name="android.permission.VIBRATE" />
+            <uses-permission android:name="android.permission.WAKE_LOCK" />
+        </config-file>
+    </platform>
+    
+    <plugin name="cordova-plugin-whitelist" spec="^1.3.5" />
+    <plugin name="cordova-plugin-statusbar" spec="^2.4.3" />
+    <plugin name="cordova-plugin-device" spec="^2.1.0" />
+    <plugin name="cordova-plugin-splashscreen" spec="^6.0.0" />
+    <plugin name="cordova-plugin-admob-free" spec="^0.27.0">
+        <variable name="ADMOB_APP_ID" value="ca-app-pub-4345529944295998~1234567890" />
+    </plugin>
+    <plugin name="cordova-plugin-media" spec="^5.0.4" />
+    
+    <engine name="android" spec="^11.0.0" />
+</widget>

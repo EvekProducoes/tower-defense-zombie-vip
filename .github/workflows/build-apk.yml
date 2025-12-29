@@ -1,0 +1,50 @@
+name: Build Android APK
+
+on:
+  push:
+    branches: [main, master]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "16"
+
+      - name: Setup Java JDK
+        uses: actions/setup-java@v3
+        with:
+          distribution: "adopt"
+          java-version: "11"
+
+      - name: Install Cordova CLI
+        run: npm install -g cordova
+
+      - name: Install project dependencies
+        run: npm install
+
+      - name: Add Android platform
+        run: cordova platform add android
+
+      - name: Build Android APK
+        run: cordova build android --verbose
+
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: Tower-Defense-Zombie-ViP-Debug
+          path: platforms/android/app/build/outputs/apk/debug/app-debug.apk
+
+      - name: Upload APK to Release (optional)
+        if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+        uses: actions/upload-artifact@v3
+        with:
+          name: Latest-APK
+          path: platforms/android/app/build/outputs/apk/debug/app-debug.apk

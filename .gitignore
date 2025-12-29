@@ -1,0 +1,30 @@
+# Dependencies
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Cordova
+platforms/
+plugins/
+*.keystore
+*.jks
+
+# Build Outputs
+*.apk
+*.aab
+*.ipa
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Local config
+local.properties
