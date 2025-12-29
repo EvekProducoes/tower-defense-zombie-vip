@@ -7,38 +7,39 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v3
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - name: Setup Node
+        uses: actions/setup-node@v3
         with:
-          node-version: "18"
+          node-version: "16"
 
-      - name: Setup Java JDK
-        uses: actions/setup-java@v4
+      - name: Setup Java
+        uses: actions/setup-java@v3
         with:
-          distribution: "temurin"
-          java-version: "17"
+          distribution: "adopt"
+          java-version: "11"
 
-      - name: Install Cordova CLI
-        run: npm install -g cordova@latest
+      - name: Install Cordova
+        run: |
+          npm install -g cordova@11
+          cordova telemetry off
 
-      - name: Install project dependencies
+      - name: Install Dependencies
         run: npm install
 
-      - name: Add Android platform
-        run: cordova platform add android@latest
+      - name: Add Android Platform
+        run: cordova platform add android@10.1.2
 
-      - name: Build Android APK
-        run: cordova build android --verbose --no-telemetry
+      - name: Build APK
+        run: cordova build android --release --verbose
 
-      - name: Upload APK artifact
-        uses: actions/upload-artifact@v4
+      - name: Upload APK
+        uses: actions/upload-artifact@v3
         with:
-          name: Tower-Defense-Zombie-ViP-APK
-          path: platforms/android/app/build/outputs/apk/debug/app-debug.apk
-          if-no-files-found: error
+          name: TowerDefenseZombieViP-APK
+          path: platforms/android/app/build/outputs/apk/release/app-release-unsigned.apk
