@@ -3,6 +3,8 @@ name: Build Android APK
 on:
   push:
     branches: [main, master]
+  pull_request:
+    branches: [main, master]
   workflow_dispatch:
 
 jobs:
@@ -10,36 +12,63 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
+      - name: 📥 Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Setup Node
+      - name: 🟢 Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: "18"
+          cache: "npm"
 
-      - name: Setup Java
+      - name: ☕ Setup Java
         uses: actions/setup-java@v4
         with:
           distribution: "temurin"
           java-version: "17"
+          cache: "gradle"
 
-      - name: Install Cordova
+      - name: 📦 Install Dependencies
+        run: npm ci
+
+      - name: 📱 Install Cordova
         run: |
-          npm install -g cordova@11
+          npm install -g cordova@12
           cordova telemetry off
 
-      - name: Install Dependencies
-        run: npm install
+      - name: 🔧 Add Android Platform
+        run: cordova platform add android@12.0.1
 
-      - name: Add Android Platform
-        run: cordova platform add android@10.1.2
+      - name: 🛠️ Build Debug APK
+        run: cordova build android --debug --verbose
 
-      - name: Build APK
+      - name: 🚀 Build Release APK
         run: cordova build android --release --verbose
 
-      - name: Upload APK
+      - name: ✅ Verify APK Files
+        run: |
+          echo "Verificando APKs gerados..."
+          ls -lh platforms/android/app/build/outputs/apk/debug/ || true
+          ls -lh platforms/android/app/build/outputs/apk/release/ || true
+
+      - name: 📤 Upload Debug APK
         uses: actions/upload-artifact@v4
         with:
-          name: TowerDefenseZombieViP-APK
+          name: TowerDefenseZombieViP-Debug
+          path: platforms/android/app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error
+
+      - name: 📤 Upload Release APK (Unsigned)
+        uses: actions/upload-artifact@v4
+        with:
+          name: TowerDefenseZombieViP-Release-Unsigned
           path: platforms/android/app/build/outputs/apk/release/app-release-unsigned.apk
+          if-no-files-found: warn
+
+      - name: 📊 Build Summary
+        if: success()
+        run: |
+          echo "✅ Build completado com sucesso!"
+          echo "📱 APK Debug: Disponível para download"
+          echo "📱 APK Release: Disponível para download (não assinado)"
+          echo "⚠️ Para publicar na Play Store, assine o APK release"

@@ -1,0 +1,104 @@
+name: Create Release
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Version number (e.g., 1.0.0)"
+        required: true
+        default: "1.0.0"
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: 🟢 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "18"
+          cache: "npm"
+
+      - name: ☕ Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: "temurin"
+          java-version: "17"
+          cache: "gradle"
+
+      - name: 📦 Install Dependencies
+        run: npm ci
+
+      - name: 📱 Install Cordova
+        run: |
+          npm install -g cordova@12
+          cordova telemetry off
+
+      - name: 🔧 Add Android Platform
+        run: cordova platform add android@12.0.1
+
+      - name: 🛠️ Build Debug APK
+        run: cordova build android --debug --verbose
+
+      - name: 🚀 Build Release APK
+        run: cordova build android --release --verbose
+
+      - name: 📝 Rename APKs
+        run: |
+          VERSION="${{ github.event.inputs.version || github.ref_name }}"
+          mv platforms/android/app/build/outputs/apk/debug/app-debug.apk \
+             "TowerDefenseZombieViP-${VERSION}-debug.apk"
+          mv platforms/android/app/build/outputs/apk/release/app-release-unsigned.apk \
+             "TowerDefenseZombieViP-${VERSION}-release-unsigned.apk"
+
+      - name: 📊 Get APK Info
+        id: apk_info
+        run: |
+          DEBUG_SIZE=$(ls -lh TowerDefenseZombieViP-*-debug.apk | awk '{print $5}')
+          RELEASE_SIZE=$(ls -lh TowerDefenseZombieViP-*-release-unsigned.apk | awk '{print $5}')
+          echo "debug_size=${DEBUG_SIZE}" >> $GITHUB_OUTPUT
+          echo "release_size=${RELEASE_SIZE}" >> $GITHUB_OUTPUT
+
+      - name: 🎉 Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ github.event.inputs.version || github.ref_name }}
+          name: Tower Defense Zombie ViP ${{ github.event.inputs.version || github.ref_name }}
+          body: |
+            ## 🧟 Tower Defense Zombie ViP
+
+            ### 📱 Downloads
+            - **Debug APK**: Para testes (tamanho: ${{ steps.apk_info.outputs.debug_size }})
+            - **Release APK**: Versão não assinada (tamanho: ${{ steps.apk_info.outputs.release_size }})
+
+            ### ⚠️ Atenção
+            O APK Release não está assinado. Para publicar na Play Store:
+            1. Assine o APK usando seu keystore
+            2. Execute zipalign
+
+            ### 📋 Como Instalar
+            1. Baixe o APK Debug
+            2. Ative "Fontes Desconhecidas" no Android
+            3. Instale o APK
+            4. Divirta-se! 🎮
+
+            ---
+            **© 2025 Dev.EMFranco**
+          files: |
+            TowerDefenseZombieViP-*-debug.apk
+            TowerDefenseZombieViP-*-release-unsigned.apk
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: ✅ Release Complete
+        run: |
+          echo "🎉 Release criado com sucesso!"
+          echo "🔗 Visite: https://github.com/${{ github.repository }}/releases"

@@ -5,17 +5,25 @@
   "description": "Tower Defense apocalíptico premium",
   "author": "Dev.EMFranco",
   "license": "MIT",
+  "scripts": {
+    "build": "cordova build android",
+    "build:release": "cordova build android --release",
+    "clean": "cordova clean",
+    "prepare": "cordova prepare android"
+  },
   "cordova": {
     "platforms": [
       "android"
     ],
     "plugins": {
-      "cordova-plugin-whitelist": "^1.3.5"
+      "cordova-plugin-whitelist": "^1.3.5",
+      "cordova-plugin-admob-free": {}
     }
   },
   "dependencies": {
-    "cordova": "^11.1.0",
-    "cordova-android": "^10.1.2",
-    "cordova-plugin-whitelist": "^1.3.5"
+    "cordova": "^12.0.0",
+    "cordova-android": "^12.0.1",
+    "cordova-plugin-whitelist": "^1.3.5",
+    "cordova-plugin-admob-free": "^0.28.0"
   }
 }

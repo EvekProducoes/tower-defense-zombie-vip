@@ -2,7 +2,9 @@
 
 ![Platform](https://img.shields.io/badge/Platform-Android-green)
 ![Version](https://img.shields.io/badge/Version-1.0.0-blue)
-![Status](https://img.shields.io/badge/Status-Ready-success)
+![Cordova](https://img.shields.io/badge/Cordova-12.0-red)
+![Android](https://img.shields.io/badge/Android-SDK%2033-brightgreen)
+![Build](https://github.com/EvekProducoes/tower-defense-zombie-vip/workflows/Build%20Android%20APK/badge.svg)
 
 ## 📱 Sobre o Jogo
 
@@ -39,19 +41,42 @@
 
 ## 🚀 Como Gerar o APK
 
-### Pré-requisitos
+### ⚡ Método Rápido: GitHub Actions (Recomendado)
 
-1. **Node.js** (v14 ou superior)
+O projeto já está configurado com **build automático**!
+
+1. **Faça push para o GitHub:**
+
+   ```bash
+   git push
+   ```
+
+2. **Aguarde o build** (5-10 minutos)
+
+3. **Baixe o APK:**
+
+   - Vá em: [Actions](https://github.com/EvekProducoes/tower-defense-zombie-vip/actions)
+   - Clique no último workflow concluído
+   - Download: `TowerDefenseZombieViP-Debug` ou `TowerDefenseZombieViP-Release-Unsigned`
+
+4. **Criar Release Oficial:**
+   - Veja o guia completo em [`RELEASE.md`](RELEASE.md)
+
+---
+
+### 🖥️ Método Local: Pré-requisitos
+
+1. **Node.js** (v18 ou superior)
 2. **Cordova**:
 
    ```bash
-   npm install -g cordova
+   npm install -g cordova@12
    ```
 
 3. **Android SDK** com:
    - Android SDK Platform 33
-   - Android SDK Build-Tools
-   - Java JDK 11+
+   - Android SDK Build-Tools 33+
+   - Java JDK 17+
 
 ### Passo a Passo
 
@@ -152,13 +177,15 @@ O jogo utiliza:
 
 ## 🔧 Melhorias Futuras
 
-- [ ] Integração AdMob (banners e interstitials)
+- [x] Integração AdMob (banners e interstitials) ✅
+- [x] Power-ups (slow motion, nuke, etc) ✅
+- [x] Efeitos sonoros e música ✅
 - [ ] Sistema de achievements
 - [ ] Múltiplos mapas/layouts
-- [ ] Modo Endless
-- [ ] Power-ups (slow motion, nuke, etc)
-- [ ] Efeitos sonoros e música
-- [ ] Leaderboard online
+- [ ] Modo Endless com dificuldade infinita
+- [ ] Leaderboard online (Firebase)
+- [ ] Skins de torres personalizáveis
+- [ ] Boss fights especiais
 
 ## 📝 Licença
 
